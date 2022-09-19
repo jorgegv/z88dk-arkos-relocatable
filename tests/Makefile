@@ -14,7 +14,8 @@ test-song:
 	$(RASM) hocuspocus.asm -o output-song-rasm
 	$(PASMO) hocuspocus.asm output-song-pasmo.bin 2>/dev/null
 	$(PASMO2Z88DK) hocuspocus.asm > converted.asm
-	$(Z80ASM)  -mz80 -b -ooutput-song-z80asm.bin converted.asm
+	$(Z80ASM) -l -mz80 -b -ooutput-song-z80asm.bin converted.asm
+	for i in rasm pasmo z80asm; do od -A x -tx1 output-song-$$i.bin > output-song-$$i.hex ; done
 
 test-player:
 	$(RASM) PlayerAkg.asm -o output-player-rasm
@@ -22,7 +23,8 @@ test-player:
 	$(DISARK) AT2Player.bin PlayerAkg_pasmo.asm --symbolFile AT2Player.sym --sourceProfile pasmo
 	$(PASMO) PlayerAkg_pasmo.asm output-player-pasmo.bin 2>/dev/null
 	$(PASMO2Z88DK) PlayerAkg_pasmo.asm > converted.asm
-	$(Z80ASM)  -mz80 -b -ooutput-player-z80asm.bin converted.asm
+	$(Z80ASM) -l -mz80 -b -ooutput-player-z80asm.bin converted.asm
+	for i in rasm pasmo z80asm; do od -A x -tx1 output-player-$$i.bin > output-player-$$i.hex ; done
 
 clean:
-	@-rm -f *.o *.bin *.sym PlayerAkg_pasmo.asm converted.asm
+	@-rm -f *.o *.bin *.sym *.hex *.lis PlayerAkg_pasmo.asm converted.asm
