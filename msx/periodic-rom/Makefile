@@ -31,10 +31,10 @@ $(ARKOS_ASM): PlayerAkg.asm PlayerAkg_SoundEffects.asm
 	perl -e 'print join("\n", map { "public PLY_AKG_$$_" } qw( INIT STOP PLAY INITSOUNDEFFECTS PLAYSOUNDEFFECT ) );' >>$(ARKOS_ASM)
 
 %.o: %.c
-	zcc +zx -vn -c -s --list -compiler=sdcc $*.c
+	zcc +msx -vn -c -s --list -compiler=sdcc $*.c
 
 %.o: %.asm
-	zcc +zx -vn -c -s --list -compiler=sdcc $*.asm
+	zcc +msx -vn -c -s --list -compiler=sdcc $*.asm
 
 clean:
 	@-rm *.lis *.bin *.tap *.o *.sym $(ARKOS_ASM) $(PASMO_ASM) $(Z88DK_ASM) *.map *.save arkos *.rom 2>/dev/null
