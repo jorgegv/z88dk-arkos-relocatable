@@ -49,8 +49,8 @@
 ;
 ;       -------------------------------------------------------
 
-       PLY_AKG_HARDWARE_SPECTRUM = 1
-       PLY_AKG_MANAGE_SOUND_EFFECTS = 1
+        PLY_AKG_HARDWARE_MSX = 1
+        PLY_AKG_MANAGE_SOUND_EFFECTS = 1
 	PLY_AKG_ROM = 1
 	PLY_AKG_ROM_Buffer = #c000
 

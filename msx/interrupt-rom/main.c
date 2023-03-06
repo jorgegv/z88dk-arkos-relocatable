@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <im2.h>
 #include <string.h>
-#include <z80.h>
+#include <msx.h>
 
 // Arkos C prototypes
 void ply_akg_init( void *song, unsigned int subsong ) __z88dk_callee;
@@ -13,12 +13,10 @@ void _ply_akg_playsoundeffect( unsigned int effect ) __z88dk_fastcall;
 
 extern uint8_t song[];
 
-#define IV_ADDR		( ( unsigned char * ) 0xD000 )
-#define ISR_ADDR	( ( unsigned char * ) 0xD1D1 )
-#define IV_BYTE		( 0xD1 )
-#define Z80_OPCODE_JP	( 0xc3 )
+#define Z80_OPCODE_JP	0xc3
+#define MSX_H_TIMI	0xfd9f
 
-IM2_DEFINE_ISR(service_interrupt)
+void service_interrupt( void )
 {
         (*(uint8_t *)0x4000)++;	// show something on screen
         ply_akg_play();
@@ -26,10 +24,7 @@ IM2_DEFINE_ISR(service_interrupt)
 
 void init_interrupts( void ) {
     intrinsic_di();
-    memset( IV_ADDR, IV_BYTE, 257);
-    z80_bpoke( ISR_ADDR, Z80_OPCODE_JP );
-    z80_wpoke( ISR_ADDR + 1, (uint16_t) service_interrupt );
-    im2_init( IV_ADDR );
+    add_raster_int( service_interrupt );
     intrinsic_ei();
 }
 
