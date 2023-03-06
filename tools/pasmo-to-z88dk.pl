@@ -14,6 +14,7 @@ open SRC, $input or
 	die "Could not open $input for reading...\n";
 
 my @all_symbols;
+my $arkos_var_offset_max = 0;
 while ( my $line = <SRC> ) {
 	chomp $line;
 
@@ -47,9 +48,22 @@ while ( my $line = <SRC> ) {
 		}
 	}
 
+	# if it is an arkos variable definition, transform it into an external ref
+	if ( $line =~ /^(PLY_AKG_\w+)\s+equ\s+(\d+)$/ ) {
+		my $var_offset = $2 - 0xc000;
+		push @output, sprintf( "%s equ _arkos_var_buffer + %d\n", $1, $var_offset );
+		push @all_symbols, $1;
+		if ( $arkos_var_offset_max < $var_offset ) {
+			$arkos_var_offset_max = $var_offset;
+		}
+		next;
+	}
+
 	# save processed line
 	push @output, "$line\n";
 }
 close SRC;
 
+push @output, "extern _arkos_var_buffer\n";
+push @output, sprintf( ";;\n;; maximum arkos variable offset: %d\n;; _arkos_var_buffer size: %d\n\n", $arkos_var_offset_max, $arkos_var_offset_max+1 );
 print join( "", @output ), "\n";
