@@ -1,6 +1,6 @@
 #include <intrinsic.h>
 #include <stdint.h>
-#include <im2.h>
+#include <interrupt.h>
 #include <string.h>
 #include <msx.h>
 
@@ -24,6 +24,7 @@ void service_interrupt( void )
 
 void init_interrupts( void ) {
     intrinsic_di();
+    im1_init();
     add_raster_int( service_interrupt );
     intrinsic_ei();
 }
