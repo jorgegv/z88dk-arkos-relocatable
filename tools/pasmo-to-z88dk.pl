@@ -38,10 +38,13 @@ while ( my $line = <SRC> ) {
 	}
 
 	# add : to all labels with instructions on the same line
-	if ( $line =~ /^(\w+)\s+(.*)$/ ) {
-		push @output, "$1:\n\t$2\n";
-		push @all_symbols, $1;
-		next;
+	# except if it's an EQU definition
+	if ( $line =~ /^(\w+)\s+(\w+)(.*)$/ ) {
+		if ( lc($2) ne 'equ' ) {
+			push @output, "$1:\n\t$2$3\n";
+			push @all_symbols, $1;
+			next;
+		}
 	}
 
 	# save processed line
