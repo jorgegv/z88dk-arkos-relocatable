@@ -20,12 +20,6 @@ while ( my $line = <SRC> ) {
 	# remove DOS-style line feeds
 	$line =~ s/\r//g;
 
-	# DB -> DEFB
-	$line =~ s/db /defb /gi;
-
-	# DW -> DEFW
-	$line =~ s/dw /defw /gi;
-
 	# all leading blanks -> 1 tab
 	$line =~ s/^\s+/\t/g;
 
@@ -39,13 +33,6 @@ while ( my $line = <SRC> ) {
 	# replace $+N with ASMPC defs
 	if ( $line =~ /^(\w+)\s+equ\s+\$([\+\-]\d+)/i ) {
 		push @output, "defc $1 = ASMPC $2\n";
-		push @all_symbols, $1;
-		next;
-	}
-
-	# replace EQU defs with DEFC
-	if ( $line =~ /^(.+)\s+equ\s+(.*)$/i ) {
-		push @output, "defc $1 = $2\n";
 		push @all_symbols, $1;
 		next;
 	}
