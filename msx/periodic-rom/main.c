@@ -10,6 +10,9 @@ void _ply_akg_playsoundeffect( unsigned int effect ) __z88dk_fastcall;
 
 extern uint8_t song[];
 
+#define ARKOS_VARS_BUFFER_SIZE 269
+uint8_t arkos_var_buffer[ ARKOS_VARS_BUFFER_SIZE ];
+
 void main( void ) {
     ply_akg_init( song, 0 );
     while ( 1 ) {
