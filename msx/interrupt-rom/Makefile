@@ -17,7 +17,7 @@ MAIN_OBJS = main.o arkos2_c_stubs_simple.o hocuspocus.o $(ARKOS_OBJ)
 .PHONY: build clean
 
 build: $(MAIN_OBJS)
-	zcc +msx -subtype=rom -compiler=sdcc -pragma-define:CRT_ORG_BSS=0xc100 -vn -m -s --list -create-app -o arkos $(MAIN_OBJS)
+	zcc +msx -subtype=rom -compiler=sdcc -vn -m -s --list -create-app -o arkos $(MAIN_OBJS)
 
 # convert Arkos RASM player to relocatable Z88DK asm player
 # reference: "Source conversion with Disark" article:
@@ -25,10 +25,7 @@ build: $(MAIN_OBJS)
 $(ARKOS_ASM): PlayerAkg.asm PlayerAkg_SoundEffects.asm
 	$(RASM) PlayerAkg.asm -o AT2Player -s -sl -sq
 	$(DISARK) AT2Player.bin $(PASMO_ASM) --symbolFile AT2Player.sym --sourceProfile pasmo
-	$(PASMO2Z88DK) $(PASMO_ASM) > $(Z88DK_ASM)
-	echo "section code_compiler" > $(ARKOS_ASM)
-	cat $(Z88DK_ASM) >> $(ARKOS_ASM)
-	perl -e 'print join("\n", map { "public PLY_AKG_$$_" } qw( INIT STOP PLAY INITSOUNDEFFECTS PLAYSOUNDEFFECT ) );' >>$(ARKOS_ASM)
+	$(PASMO2Z88DK) $(PASMO_ASM) > $(ARKOS_ASM)
 
 %.o: %.c
 	zcc +msx  -vn  -compiler=sdcc -c -s --list $*.c

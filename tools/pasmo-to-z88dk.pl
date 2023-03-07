@@ -13,6 +13,11 @@ defined( $input ) or
 open SRC, $input or
 	die "Could not open $input for reading...\n";
 
+push @output, "section code_sound_ay\n";
+foreach my $sym ( qw( INIT STOP PLAY INITSOUNDEFFECTS PLAYSOUNDEFFECT ) ) {
+	push @output, "public PLY_AKG_$sym\n";
+}
+
 my @all_symbols;
 my $arkos_var_offset_max = 0;
 while ( my $line = <SRC> ) {
@@ -64,6 +69,9 @@ while ( my $line = <SRC> ) {
 }
 close SRC;
 
-push @output, "extern _arkos_var_buffer\n";
+
 push @output, sprintf( ";;\n;; maximum arkos variable offset: %d\n;; _arkos_var_buffer size: %d\n\n", $arkos_var_offset_max, $arkos_var_offset_max+1 );
+push @output, "\nsection bss_sound_ay\n";
+push @output, sprintf("_arkos_var_buffer:\n\tdefs %d\n", $arkos_var_offset_max + 1 );
+
 print join( "", @output ), "\n";
