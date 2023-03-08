@@ -3,19 +3,38 @@
 use strict;
 use warnings;
 use utf8;
+use Getopt::Std;
 
-my @output;
+sub show_help_and_die {
+	die <<EOF_HELP
+usage: $0 <pasmo_asm_file> [-r] [-e]
+  -r: the ASM input file has been configured for ROM code
+  -s: process input in SONG mode (does not include EXTERN declarations for Arkos player functions)
+EOF_HELP
+;
+}
+
+# check arguments and options
+our ( $opt_r, $opt_s );
+getopts("rs");
+my $rom_mode = $opt_r || 0;
+my $song_mode = $opt_s || 0;
 
 my $input = $ARGV[0];
-defined( $input ) or
-	die "usage: $0 <pasmo_asm_file>\n";
+defined( $input ) or show_help_and_die;
 
+# open input and start processing
 open SRC, $input or
 	die "Could not open $input for reading...\n";
 
-push @output, "section code_sound_ay\n";
-foreach my $sym ( qw( INIT STOP PLAY INITSOUNDEFFECTS PLAYSOUNDEFFECT ) ) {
-	push @output, "public PLY_AKG_$sym\n";
+my @output;
+
+# output proper section name, and if in code mode, public declarations
+if ( $song_mode ) {
+	push @output, "section data_sound_ay\n";
+} else {
+	push @output, "section code_sound_ay\n";
+	push @output, map { "public PLY_AKG_$_\n" } qw( INIT STOP PLAY INITSOUNDEFFECTS PLAYSOUNDEFFECT );
 }
 
 my @all_symbols;
@@ -69,9 +88,12 @@ while ( my $line = <SRC> ) {
 }
 close SRC;
 
-
-push @output, sprintf( ";;\n;; maximum arkos variable offset: %d\n;; _arkos_var_buffer size: %d\n\n", $arkos_var_offset_max, $arkos_var_offset_max+1 );
-push @output, "\nsection bss_sound_ay\n";
-push @output, sprintf("_arkos_var_buffer:\n\tdefs %d\n", $arkos_var_offset_max + 1 );
+# if $arkos_var_offset_max is > 0, some arkos vars were detected, which
+# means a) this is code, not a song, and b) this is rom mode
+if ( $arkos_var_offset_max ) {
+	push @output, sprintf( ";;\n;; maximum arkos variable offset: %d\n;; _arkos_var_buffer size: %d\n\n", $arkos_var_offset_max, $arkos_var_offset_max+1 );
+	push @output, "\nsection bss_sound_ay\n";
+	push @output, sprintf("_arkos_var_buffer:\n\tdefs %d\n", $arkos_var_offset_max + 1 );
+}
 
 print join( "", @output ), "\n";

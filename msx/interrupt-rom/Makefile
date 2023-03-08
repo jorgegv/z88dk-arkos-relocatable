@@ -1,7 +1,7 @@
 # configure these if needed
 RASM	= ~/src/spectrum/rasm/rasm.exe
 DISARK	= '/home/jorgegv/src/spectrum/arkos/Arkos Tracker 2/tools/Disark'
-PASMO2Z88DK = ../../tools/pasmo-to-z88dk.pl
+PASMO2Z88DK = ../../tools/arkos-to-z88dk.pl
 
 # intermediate files
 PASMO_ASM = pasmo_arkos2.asm

@@ -1,7 +1,7 @@
 # configure these if needed
 RASM	= ~/src/spectrum/rasm/rasm.exe
 DISARK	= '/home/jorgegv/src/spectrum/arkos/Arkos Tracker 2/tools/Disark'
-PASMO2Z88DK = ../../tools/pasmo-to-z88dk.pl
+PASMO2Z88DK = ../../tools/arkos-to-z88dk.pl
 
 # intermediate files
 PASMO_ASM = pasmo_arkos2.asm
@@ -25,10 +25,7 @@ build: $(MAIN_OBJS)
 $(ARKOS_ASM): PlayerAkg.asm PlayerAkg_SoundEffects.asm
 	$(RASM) PlayerAkg.asm -o AT2Player -s -sl -sq
 	$(DISARK) AT2Player.bin $(PASMO_ASM) --symbolFile AT2Player.sym --sourceProfile pasmo
-	$(PASMO2Z88DK) $(PASMO_ASM) > $(Z88DK_ASM)
-	echo "section code_compiler" > $(ARKOS_ASM)
-	cat $(Z88DK_ASM) >> $(ARKOS_ASM)
-	perl -e 'print join("\n", map { "public PLY_AKG_$$_" } qw( INIT STOP PLAY INITSOUNDEFFECTS PLAYSOUNDEFFECT ) );' >>$(ARKOS_ASM)
+	$(PASMO2Z88DK) $(PASMO_ASM) > $(ARKOS_ASM)
 
 %.o: %.c
 	zcc +msx -vn -c -s --list -compiler=sdcc $*.c
