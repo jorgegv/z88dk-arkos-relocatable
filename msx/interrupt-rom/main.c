@@ -5,16 +5,13 @@
 #include <msx.h>
 
 // Arkos C prototypes
-void ply_akg_init( void *song, unsigned int subsong ) __z88dk_callee;
+void ply_akg_init( void *song, unsigned int subsong ) __z88dk_callee __smallc;
 void ply_akg_play( void );
 void ply_akg_stop( void );
 void ply_akg_initsoundeffects( void *effects_table ) __z88dk_fastcall;
 void _ply_akg_playsoundeffect( unsigned int effect ) __z88dk_fastcall;
 
 extern uint8_t song[];
-
-#define ARKOS_VARS_BUFFER_SIZE 269
-uint8_t arkos_var_buffer[ ARKOS_VARS_BUFFER_SIZE ];
 
 void service_interrupt( void )
 {
