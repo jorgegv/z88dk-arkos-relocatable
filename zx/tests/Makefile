@@ -1,7 +1,7 @@
 RASM = /home/jorgegv/src/spectrum/rasm/rasm.exe
 PASMO = /home/jorgegv/src/spectrum/pasmo/pasmo
 Z80ASM = z88dk-z80asm
-PASMO2Z88DK = ../../tools/arkos-to-z88dk.pl
+PASMO2Z88DK = ../../support/arkos-to-z88dk.pl
 DISARK = '/home/jorgegv/src/spectrum/arkos/Arkos Tracker 2/tools/Disark'
 
 test: test-song test-player
