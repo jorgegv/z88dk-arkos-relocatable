@@ -1,7 +1,9 @@
+.SILENT:
+
 RASM = /home/jorgegv/src/spectrum/rasm/rasm.exe
 PASMO = /home/jorgegv/src/spectrum/pasmo/pasmo
 Z80ASM = z88dk-z80asm
-PASMO2Z88DK = ../../support/arkos-to-z88dk.pl
+PASMO2Z88DK = ../support/arkos-to-z88dk.pl
 DISARK = '/home/jorgegv/src/spectrum/arkos/Arkos Tracker 2/tools/Disark'
 
 test: test-song test-player
@@ -27,4 +29,4 @@ test-player:
 	for i in rasm pasmo z80asm; do od -A x -tx1 output-player-$$i.bin > output-player-$$i.hex ; done
 
 clean:
-	@-rm -f *.o *.bin *.sym *.hex *.lis PlayerAkg_pasmo.asm converted.asm
+	@-rm -f *.o *.bin *.sym *.hex *.lis PlayerAkg_pasmo.asm converted.asm output-song-z80asm
