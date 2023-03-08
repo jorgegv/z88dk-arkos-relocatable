@@ -11,7 +11,7 @@ ARKOS_OBJ = $(ARKOS_ASM:.asm=.o)
 
 # main target objs
 #MAIN_OBJS = main.o arkos2_c_stubs.o hocuspocus.o $(ARKOS_OBJ)
-MAIN_OBJS = main.o arkos2_c_stubs_simple.o hocuspocus.o $(ARKOS_OBJ)
+MAIN_OBJS = main.o ../../libsrc/arkos2_c_stubs_simple.o hocuspocus.o $(ARKOS_OBJ)
 
 # targets
 .PHONY: build clean
