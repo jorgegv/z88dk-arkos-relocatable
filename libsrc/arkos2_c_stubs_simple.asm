@@ -49,10 +49,19 @@ defc _ply_akg_stop = PLY_AKG_STOP
 defc _ply_akg_initsoundeffects = PLY_AKG_INITSOUNDEFFECTS
 
 
+;;;
+;; void ply_akg_playsoundeffect( uint16_t effect, uint16_t channel, uint16_t inv_volume ) __z88dk_callee __smallc;
+;;   (params pushed on the stack left to right, all 16-bit)
 ;;
-;; void _ply_akg_playsoundeffect( uint8_t effect ) __z88dk_fastcall;
-;;   (param in HL)
-;;
-_ply_akg_playsoundeffect = PLY_AKG_PLAYSOUNDEFFECT
-	ld a,l
-	jp PLY_AKG_PLAYSOUNDEFFECT
+_ply_akg_playsoundeffect:
+        pop hl          ; HL = retaddr
+
+        pop bc
+        ld b,c          ; B = inv volume
+        pop de
+        ld c,e          ; C = num channel
+        pop de
+        ld a,e          ; A = sound effect number
+
+        push hl         ; restore retaddr
+        jp PLY_AKG_PLAYSOUNDEFFECT
